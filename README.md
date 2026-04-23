@@ -18,4 +18,17 @@ This repository provides modular, scalable, and environment-agnostic Terraform c
 ---
 
 ## 📁 Repository Structure
-
+terraform-aws-modules/
+│
+├── modules/
+│ └── vpc/
+│ ├── main.tf
+│ ├── variables.tf
+│ ├── outputs.tf
+│ └── locals.tf
+│
+├── examples/
+│ └── vpc-basic/
+│ └── main.tf
+│
+└── README.md
