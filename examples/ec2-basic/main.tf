@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "ec2" {
-  source = "../modules/ec2"
+  source = "../../modules/ec2"
 
   name           = "test-ec2"
   ami_id         = data.aws_ami.amazon_linux.id
