@@ -1,53 +1,34 @@
 variable "name" {
-  description = "Instance name"
-  type        = string
+  type = string
+}
+
+variable "ami_id" {
+  type = string
 }
 
 variable "instance_type" {
-  description = "EC2 instance type"
-  type        = string
+  type = string
+  default = "t3.micro"
 }
 
 variable "subnet_id" {
-  description = "Subnet ID"
-  type        = string
+  type = string
 }
 
 variable "vpc_security_group_ids" {
-  description = "Security groups"
-  type        = list(string)
+  type = list(string)
 }
 
-variable "os_type" {
-  description = "Operating system (linux/windows)"
-  type        = string
-}
-
-variable "key_name" {
-  description = "Key pair name"
-  type        = string
-}
-
-variable "user_data_enabled" {
+variable "create_iam_role" {
   type    = bool
-  default = true
+  default = false
+}
+
+variable "user_data" {
+  type    = string
+  default = null
 }
 
 variable "tags" {
-  type    = map(string)
-  default = {}
-}
-
-variable "associate_public_ip" {
-  type    = bool
-  default = true
-  
-}
-
-variable "iam_instance_profile" {
-  
-}
-
-variable "root_volume_size" {
-  
+  type = map(string)
 }

@@ -1,52 +1,28 @@
-data "aws_ami" "linux" {
-  most_recent = true
-  owners      = ["amazon"]
+resource "aws_iam_role" "this" {
+  count = var.create_iam_role ? 1 : 0
 
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
-  }
-}
+  name = "${var.name}-role"
 
-data "aws_ami" "windows" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["Windows_Server-2019-English-Full-Base-*"]
-  }
-}
-
-locals {
-  ami_id = var.os_type == "linux" ? data.aws_ami.linux.id : data.aws_ami.windows.id
-
-  user_data = var.user_data_enabled ? (
-    var.os_type == "linux"
-    ? file("${path.module}/user_data/linux.sh")
-    : file("${path.module}/user_data/windows.ps1")
-  ) : null
+  assume_role_policy = data.aws_iam_policy_document.ec2_assume.json
 }
 
 resource "aws_instance" "this" {
-  ami                         = local.ami_id
-  instance_type               = var.instance_type
-  subnet_id                   = var.subnet_id
-  vpc_security_group_ids      = var.vpc_security_group_ids
-  key_name                    = var.key_name
-  associate_public_ip_address = var.associate_public_ip
+  ami           = var.ami_id
+  instance_type = var.instance_type
+  subnet_id     = var.subnet_id
 
-  iam_instance_profile = var.iam_instance_profile
+  vpc_security_group_ids = var.vpc_security_group_ids
 
-  user_data = local.user_data
+  user_data = var.user_data
 
-  root_block_device {
-    volume_size = var.root_volume_size
-    volume_type = "gp3"
-  }
+  iam_instance_profile = var.create_iam_role ? aws_iam_instance_profile.this[0].name : null
 
   tags = merge(var.tags, {
     Name = var.name
-    OS   = var.os_type
   })
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
+
