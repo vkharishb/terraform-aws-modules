@@ -3,7 +3,8 @@ provider "aws" {
 }
 
 module "ec2" {
-  source = "../../modules/ec2"
+  #source = "../../modules/ec2"
+  source = "git::https://github.com/vkharishb/terraform-aws-modules.git//modules/ec2?ref=main"
 
   name          = "test-ec2"
   ami_id        = data.aws_ami.amazon_linux.id

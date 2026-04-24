@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "vpc" {
-  source = "git::https://github.com/vkharishb/terraform-aws-modules.git//vpc?ref=main"
+  source = "git::https://github.com/vkharishb/terraform-aws-modules.git//modules/vpc?ref=main"
   #source = "../../modules/vpc"
 
   name       = "demo-vpc"
