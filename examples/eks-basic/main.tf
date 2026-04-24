@@ -15,10 +15,10 @@ module "vpc" {
   source = "git::https://github.com/vkharishb/terraform-aws-modules.git//modules/vpc?ref=main"
   #source = "../../modules/vpc"
 
-  name = "demo-vpc"
+  name       = "demo-vpc"
   cidr_block = var.cidr_block
 
-   tags = {
+  tags = {
     Environment = "dev"
   }
 }
