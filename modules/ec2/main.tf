@@ -1,10 +1,31 @@
+# ── IAM ──────────────────────────────────────────────────────────────────────
+
+data "aws_iam_policy_document" "ec2_assume" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
 resource "aws_iam_role" "this" {
   count = var.create_iam_role ? 1 : 0
 
-  name = "${var.name}-role"
-
+  name               = "${var.name}-role"
   assume_role_policy = data.aws_iam_policy_document.ec2_assume.json
 }
+
+resource "aws_iam_instance_profile" "this" {
+  count = var.create_iam_role ? 1 : 0
+
+  name = "${var.name}-role"
+  role = aws_iam_role.this[0].name
+}
+
+# ── EC2 ──────────────────────────────────────────────────────────────────────
 
 resource "aws_instance" "this" {
   ami           = var.ami_id
@@ -25,4 +46,3 @@ resource "aws_instance" "this" {
     create_before_destroy = true
   }
 }
-

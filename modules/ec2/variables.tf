@@ -15,6 +15,12 @@ variable "subnet_id" {
   type = string
 }
 
+
+variable "iam_role_name" {
+  type    = string
+  default = null
+}
+
 variable "vpc_security_group_ids" {
   type = list(string)
 }
